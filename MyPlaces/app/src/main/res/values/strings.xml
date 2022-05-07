@@ -17,4 +17,10 @@
     <string name="ok">Ok</string>
     <string name="about_text"><i>My Places</i> is an application that will help you remember characteristics and locations of your favourite places.</string>
     <string name="title_activity_my_places_list">MyPlacesList</string>
+    <string name="title_activity_edit_my_place">EditMyPlaceActivity</string>
+    <string name="editmyplace_name_label">Name:</string>
+    <string name="editmyplace_desc_label">Description:</string>
+    <string name="editmyplace_cancel_label">Cancel</string>
+    <string name="title_activity_view_my_places">ViewMyPlacesActivity</string>
+    <string name="viewmyplace_finished_button">OK</string>
 </resources>

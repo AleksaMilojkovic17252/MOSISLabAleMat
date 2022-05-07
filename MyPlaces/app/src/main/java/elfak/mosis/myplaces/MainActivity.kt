@@ -1,6 +1,8 @@
 package elfak.mosis.myplaces
 
+import android.app.Activity
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +21,11 @@ class MainActivity : AppCompatActivity()
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
+    companion object
+    {
+        val NEW_PLACE = 1
+    }
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -33,8 +40,8 @@ class MainActivity : AppCompatActivity()
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         binding.fab.setOnClickListener{ view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            val i: Intent = Intent(this, EditMyPlaceActivity::class.java)
+            startActivityForResult(i, MyPlacesList.NEW_PLACE)
         }
     }
 
@@ -53,7 +60,12 @@ class MainActivity : AppCompatActivity()
         when (item.itemId)
         {
             R.id.action_show_map -> Toast.makeText(this, "Show Map!", Toast.LENGTH_SHORT).show()
-            R.id.action_new_place -> Toast.makeText(this, "New Place!", Toast.LENGTH_SHORT).show()
+            R.id.action_new_place ->
+            {
+                var i: Intent = Intent(this,EditMyPlaceActivity::class.java)
+                startActivityForResult(i, MainActivity.NEW_PLACE)
+
+            }
             R.id.action_my_places_list ->
             {
                 val i: Intent = Intent(this, MyPlacesList::class.java)
@@ -74,4 +86,14 @@ class MainActivity : AppCompatActivity()
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
+    {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK)
+        {
+            Toast.makeText(this, "New Place Added", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 }

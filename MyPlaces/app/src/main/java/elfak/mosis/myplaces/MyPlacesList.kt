@@ -1,9 +1,11 @@
 package elfak.mosis.myplaces
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
@@ -22,6 +24,11 @@ class MyPlacesList : AppCompatActivity()
     private lateinit var binding: ActivityMyPlacesListBinding
     private var places: ArrayList<String> = ArrayList<String>()
 
+    companion object
+    {
+        val NEW_PLACE = 1
+    }
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -30,22 +37,55 @@ class MyPlacesList : AppCompatActivity()
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        places = ArrayList<String>()
-        places.add("Tvrdjava")
-        places.add("Cair")
-        places.add("Park Svetog Save")
-        places.add("Trg Kralja Milana")
-        places.add("Jagodin Mala")
+        //supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         var listaMesta:ListView = findViewById(R.id.my_places_list)
-        listaMesta.adapter = ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,places)
+        MyPlacesData.popuni()
+        listaMesta.adapter = ArrayAdapter<MyPlace>(this,android.R.layout.simple_list_item_1,MyPlacesData.myPlaces)
+        listaMesta.setOnItemClickListener{ adapterView, view, i, l ->
+            val positionBundle:Bundle = Bundle()
+            positionBundle.putInt("position",i)
+            val radi:Intent = Intent(this, ViewMyPlacesActivity::class.java)
+            radi.putExtras(positionBundle)
+            startActivity(radi)
+        }
+
+        listaMesta.setOnCreateContextMenuListener { contextMenu, view, contextMenuInfo ->
+            val info: AdapterView.AdapterContextMenuInfo = contextMenuInfo as AdapterView.AdapterContextMenuInfo
+            val place: MyPlace = MyPlacesData.getPlace(info.position)
+            contextMenu.setHeaderTitle(place.name)
+            contextMenu.add(0,1,1,"View Place")
+            contextMenu.add(0,2,2,"Edit Place")
+        }
+
 
         binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show()
+            val i: Intent = Intent(this, EditMyPlaceActivity::class.java)
+            startActivityForResult(i,NEW_PLACE)
         }
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        val info: AdapterView.AdapterContextMenuInfo = item.menuInfo as AdapterView.AdapterContextMenuInfo
+        val positionBundle:Bundle = Bundle()
+        positionBundle.putInt("position",info.position)
+        var i:Intent? = null
+        if(item.itemId == 1)
+        {
+            i =  Intent(this, ViewMyPlacesActivity::class.java)
+            i.putExtras(positionBundle)
+            startActivity(i)
+        }
+        else if(item.itemId == 2)
+        {
+            i =  Intent(this, EditMyPlaceActivity::class.java)
+            i.putExtras(positionBundle)
+            startActivityForResult(i,1)
+        }
+        return super.onContextItemSelected(item)
     }
 
     override fun onSupportNavigateUp(): Boolean
@@ -64,13 +104,31 @@ class MyPlacesList : AppCompatActivity()
         when(item.itemId)
         {
             R.id.action_show_map -> Toast.makeText(this, "Show Map!", Toast.LENGTH_SHORT).show()
-            R.id.action_new_place -> Toast.makeText(this, "New Place!", Toast.LENGTH_SHORT).show()
+            R.id.action_new_place ->
+            {
+                var i: Intent = Intent(this,EditMyPlaceActivity::class.java)
+                startActivityForResult(i, MainActivity.NEW_PLACE)
+            }
             R.id.action_about ->
             {
                 val i : Intent = Intent(this,About::class.java)
                 startActivity(i)
             }
+            android.R.id.home -> finish()
+
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
+    {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK)
+        {
+            var listaMesta:ListView = findViewById(R.id.my_places_list)
+            MyPlacesData.popuni()
+            listaMesta.adapter = ArrayAdapter<MyPlace>(this,android.R.layout.simple_list_item_1,MyPlacesData.myPlaces)
+            Toast.makeText(this, "New Place Added", Toast.LENGTH_SHORT).show()
+        }
     }
 }
