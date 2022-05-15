@@ -5,19 +5,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.addTextChangedListener
-import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import elfak.mosis.myplaces.databinding.ActivityEditMyPlaceBinding
 
 class EditMyPlaceActivity : AppCompatActivity()
@@ -64,9 +60,14 @@ class EditMyPlaceActivity : AppCompatActivity()
                     var nme: String = etName.text.toString()
                     var etDesc: EditText = findViewById<EditText>(R.id.editmyplace_desc_edit)
                     var desc: String = etDesc.text.toString()
+                    var etLat: EditText = findViewById<EditText>(R.id.editmyplace_lat_edit)
+                    var lat: String = etLat.text.toString()
+                    var etLong: EditText = findViewById<EditText>(R.id.editmyplace_lon_edit)
+                    var long: String = etLong.text.toString()
+
                     if(!editMode)
                     {
-                        val place: MyPlace = MyPlace(nme,desc)
+                        val place: MyPlace = MyPlace(nme,desc,long, lat)
                         MyPlacesData.addNewPlace(place)
                     }
                     else
@@ -74,6 +75,8 @@ class EditMyPlaceActivity : AppCompatActivity()
                         val place:MyPlace = MyPlacesData.getPlace(position)
                         place.name = nme
                         place.description = desc
+                        place.longitude = long
+                        place.latitude = lat
                     }
 
 
@@ -84,6 +87,12 @@ class EditMyPlaceActivity : AppCompatActivity()
                 {
                     setResult(Activity.RESULT_CANCELED)
                     finish()
+                }
+                R.id.editmyplace_location_button ->
+                {
+                    var i = Intent(this, MyPlacesMapsActivity::class.java)
+                    i.putExtra("state",MyPlacesMapsActivity.SELECT_CORDINATES)
+                    startActivityForResult(i,1)
                 }
             }
         }
@@ -130,6 +139,9 @@ class EditMyPlaceActivity : AppCompatActivity()
             }
 
         })
+
+        var locationButton: Button = findViewById(R.id.editmyplace_location_button)
+        locationButton.setOnClickListener(fja)
     }
 
     override fun onSupportNavigateUp(): Boolean
@@ -163,5 +175,31 @@ class EditMyPlaceActivity : AppCompatActivity()
 
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
+    {
+        super.onActivityResult(requestCode, resultCode, data)
+        try
+        {
+            when(resultCode)
+            {
+                Activity.RESULT_OK ->
+                {
+                    var lon = data?.extras?.getString("lon")
+                    var etLon = findViewById<EditText>(R.id.editmyplace_lon_edit)
+                    etLon.setText(lon)
+
+                    var lat = data?.extras?.getString("lat")
+                    var etLat = findViewById<EditText>(R.id.editmyplace_lat_edit)
+                    etLat.setText(lat)
+
+                }
+            }
+        }
+        catch (e : Exception)
+        {
+
+        }
     }
 }

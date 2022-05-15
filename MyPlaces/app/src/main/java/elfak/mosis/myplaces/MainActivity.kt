@@ -59,7 +59,12 @@ class MainActivity : AppCompatActivity()
         // as you specify a parent activity in AndroidManifest.xml.
         when (item.itemId)
         {
-            R.id.action_show_map -> Toast.makeText(this, "Show Map!", Toast.LENGTH_SHORT).show()
+            R.id.action_show_map ->
+            {
+                var i:Intent = Intent(this, MyPlacesMapsActivity::class.java)
+                i.putExtra("state", MyPlacesMapsActivity.SHOW_MAP)
+                startActivity(i)
+            }
             R.id.action_new_place ->
             {
                 var i: Intent = Intent(this,EditMyPlaceActivity::class.java)

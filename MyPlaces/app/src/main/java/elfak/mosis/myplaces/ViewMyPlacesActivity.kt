@@ -7,13 +7,8 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import android.widget.Toolbar
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import elfak.mosis.myplaces.databinding.ActivityViewMyPlacesBinding
 import java.lang.Exception
 
@@ -50,18 +45,22 @@ class ViewMyPlacesActivity : AppCompatActivity()
         if(pos >= 0)
         {
             val place:MyPlace = MyPlacesData.getPlace(pos)
+
             val twName: TextView = findViewById<TextView>(R.id.viewmyplace_name_text)
             twName.setText(place.name)
             val twDesc: TextView = findViewById<TextView>(R.id.viewmyplace_desc_text)
             twDesc.setText(place.description)
+            val twLon: TextView = findViewById<TextView>(R.id.viewmyplace_lon_text)
+            twLon.setText(place.longitude)
+            val twLat: TextView = findViewById<TextView>(R.id.viewmyplace_lat_text)
+            twLat.setText(place.latitude)
+
             val finishedButton: Button = findViewById<Button>(R.id.viewmyplace_finished_button)
             finishedButton.setOnClickListener { view ->
                 finish()
             }
 
         }
-
-
 
     }
 

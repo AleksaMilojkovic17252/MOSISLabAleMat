@@ -59,6 +59,8 @@ class MyPlacesList : AppCompatActivity()
             contextMenu.setHeaderTitle(place.name)
             contextMenu.add(0,1,1,"View Place")
             contextMenu.add(0,2,2,"Edit Place")
+            contextMenu.add(0,3,3,"Delete Place")
+            contextMenu.add(0,4,4,"Show on Map")
         }
 
 
@@ -73,19 +75,42 @@ class MyPlacesList : AppCompatActivity()
         val positionBundle:Bundle = Bundle()
         positionBundle.putInt("position",info.position)
         var i:Intent? = null
-        if(item.itemId == 1)
+        when(item.itemId)
         {
-            i =  Intent(this, ViewMyPlacesActivity::class.java)
-            i.putExtras(positionBundle)
-            startActivity(i)
-        }
-        else if(item.itemId == 2)
-        {
-            i =  Intent(this, EditMyPlaceActivity::class.java)
-            i.putExtras(positionBundle)
-            startActivityForResult(i,1)
+            1 ->
+            {
+                i = Intent(this, ViewMyPlacesActivity::class.java)
+                i.putExtras(positionBundle)
+                startActivity(i)
+            }
+            2 ->
+            {
+                i =  Intent(this, EditMyPlaceActivity::class.java)
+                i.putExtras(positionBundle)
+                startActivityForResult(i,1)
+            }
+            3 ->
+            {
+                MyPlacesData.deletePlace(info.position)
+                setList()
+            }
+             4 ->
+             {
+                 i = Intent(this, MyPlacesMapsActivity::class.java)
+                 i.putExtra("state",MyPlacesMapsActivity.CENTER_PLACE_ON_MAP)
+                 var place = MyPlacesData.myPlaces[info.position]
+                 i.putExtra("lat",place.latitude)
+                 i.putExtra("lon",place.longitude)
+                 startActivityForResult(i,2)
+             }
         }
         return super.onContextItemSelected(item)
+    }
+
+    private fun setList()
+    {
+        var myPlaceListView = findViewById<ListView>(R.id.my_places_list)
+        myPlaceListView.adapter = ArrayAdapter<MyPlace>(this, android.R.layout.simple_list_item_1, MyPlacesData.myPlaces)
     }
 
     override fun onSupportNavigateUp(): Boolean
