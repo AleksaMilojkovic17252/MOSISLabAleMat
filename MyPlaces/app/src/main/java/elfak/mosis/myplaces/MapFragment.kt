@@ -58,14 +58,25 @@ class MapFragment : Fragment()
             ActivityCompat.checkSelfPermission(requireActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
         else
-        {
-            setMyLoactionOverlay()
+            setupMap()
+    }
+
+    private fun setupMap()
+    {
+        var startPoint = GeoPoint(43.3289,21.8958)
+        map.controller.setZoom(15.0)
+        if (locationViewModel.setLocation)
             setOnMapClickOverlay()
+        else
+        {
+            if (myPlacesViewModel.selected != null)
+                startPoint = GeoPoint(myPlacesViewModel.selected!!.latitude.toDouble(),myPlacesViewModel.selected!!.longitude.toDouble())
+            else
+                setMyLoactionOverlay()
+
         }
 
-        map.controller.setZoom(15.0)
-        val startPoint = GeoPoint(43.3209,21.8958)
-        map.controller.setCenter(startPoint)
+        map.controller.animateTo(startPoint)
     }
 
     private fun setMyLoactionOverlay()
