@@ -104,7 +104,12 @@ class ListFragment : Fragment() {
                 myPLacesViewModel.selected = myPLacesViewModel.myPlacesList[info.position]
                 this.findNavController().navigate(R.id.action_ListFragment_to_EditFragment)
             }
-            3 -> Toast.makeText(this.context,"Delete item",Toast.LENGTH_SHORT).show()
+            3 ->
+            {
+                myPLacesViewModel.myPlacesList.removeAt(info.position)
+                val myPlaceList = requireView().findViewById<ListView>(R.id.my_places_list)
+                myPlaceList.adapter = this@ListFragment.context?.let { ArrayAdapter<MyPlace>(it, android.R.layout.simple_list_item_1,myPLacesViewModel.myPlacesList) }
+            }
 
         }
 

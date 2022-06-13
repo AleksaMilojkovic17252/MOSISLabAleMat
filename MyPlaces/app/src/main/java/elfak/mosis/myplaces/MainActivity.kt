@@ -10,7 +10,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.MediaController
 import android.widget.Toast
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import elfak.mosis.myplaces.databinding.ActivityMainBinding
 
@@ -19,6 +21,7 @@ class MainActivity : AppCompatActivity()
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -29,7 +32,7 @@ class MainActivity : AppCompatActivity()
 
         setSupportActionBar(binding.toolbar)
 
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
@@ -46,7 +49,7 @@ class MainActivity : AppCompatActivity()
             {
                 R.id.HomeFragment -> navController.navigate(R.id.action_HomeFragment_to_EditFragment)
                 R.id.ListFragment -> navController.navigate(R.id.action_ListFragment_to_EditFragment)
-
+                R.id.MapFragment ->  navController.navigate(R.id.action_MapFragment_to_EditFragment)
             }
         }
     }
@@ -60,7 +63,14 @@ class MainActivity : AppCompatActivity()
         // as you specify a parent activity in AndroidManifest.xml.
         when (item.itemId)
         {
-            R.id.action_show_map -> Toast.makeText(this, "Show Map!", Toast.LENGTH_SHORT).show()
+            R.id.action_show_map ->
+            {
+                when(navController.currentDestination?.id)
+                {
+                    R.id.HomeFragment -> navController.navigate(R.id.action_HomeFragment_to_MapFragment)
+                    R.id.ListFragment -> navController.navigate(R.id.action_ListFragment_to_MapFragment)
+                }
+            }
             R.id.action_new_place -> Toast.makeText(this, "New Place!", Toast.LENGTH_SHORT).show()
             R.id.action_my_places_list ->
             {
