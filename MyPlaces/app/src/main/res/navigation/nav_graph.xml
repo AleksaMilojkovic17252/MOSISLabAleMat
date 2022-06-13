@@ -10,7 +10,6 @@
         android:name="elfak.mosis.myplaces.HomeFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_home">
-
         <action
             android:id="@+id/action_HomeFragment_to_ListFragment"
             app:destination="@id/ListFragment" />
@@ -23,10 +22,6 @@
         android:name="elfak.mosis.myplaces.ListFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_list">
-
-        <action
-            android:id="@+id/action_ListFragment_to_HomeFragment"
-            app:destination="@id/HomeFragment" />
         <action
             android:id="@+id/action_ListFragment_to_EditFragment"
             app:destination="@id/EditFragment" />
@@ -39,22 +34,11 @@
         android:name="elfak.mosis.myplaces.EditFragment"
         android:label="@string/edit_fragment_label"
         tools:layout="@layout/fragment_edit">
-
-        <action
-            android:id="@+id/action_EditFragment_to_HomeFragment"
-            app:destination="@id/HomeFragment" />
-        <action
-            android:id="@+id/action_EditFragment_to_ListFragment"
-            app:destination="@id/ListFragment" />
     </fragment>
     <fragment
         android:id="@+id/ViewFragment"
         android:name="elfak.mosis.myplaces.ViewFragment"
         android:label="@string/view_fragment_label"
         tools:layout="@layout/fragment_view">
-        <action
-            android:id="@+id/action_ViewFragment_to_ListFragment"
-            app:destination="@id/ListFragment" />
-
-    </fragment>
+        </fragment>
 </navigation>

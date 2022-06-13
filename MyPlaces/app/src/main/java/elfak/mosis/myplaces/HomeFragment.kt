@@ -36,21 +36,22 @@ class HomeFragment : Fragment() {
 
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+    {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_HomeFragment_to_ListFragment)
-        }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId){
-            R.id.action_my_places_list -> {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean
+    {
+        return when (item.itemId)
+        {
+            R.id.action_my_places_list ->
+            {
                 findNavController().navigate(R.id.action_HomeFragment_to_ListFragment)
                 true
             }
-            R.id.action_new_place -> {
+            R.id.action_new_place ->
+            {
                 findNavController().navigate(R.id.action_HomeFragment_to_EditFragment)
                 true
             }

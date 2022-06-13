@@ -23,30 +23,10 @@ class EditFragment : Fragment() {
 
     private val myPlacesViewModel: MyPlacesViewModel by activityViewModels();
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_main,menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId){
-            R.id.action_my_places_list -> {
-                this.findNavController().navigate(R.id.action_EditFragment_to_ListFragment)
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu)
-    {
-        super.onPrepareOptionsMenu(menu)
-        val item = menu.findItem(R.id.action_new_place)
-        item.isVisible = false
     }
 
     override fun onCreateView(
@@ -78,15 +58,9 @@ class EditFragment : Fragment() {
 
         editName.addTextChangedListener(object : TextWatcher
         {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int)
-            {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int)
-            {
-
-            }
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun afterTextChanged(p0: Editable?)
             {
@@ -105,12 +79,12 @@ class EditFragment : Fragment() {
             }
             else
                 myPlacesViewModel.addPlace(MyPlace(name,desc))
-            findNavController().navigate(R.id.action_EditFragment_to_ListFragment)
+            findNavController().popBackStack()
         }
 
         val cancelButton: Button = requireView().findViewById<Button>(R.id.editmyplace_cancel_button)
         cancelButton.setOnClickListener {
-            findNavController().navigate((R.id.action_EditFragment_to_ListFragment))
+            findNavController().popBackStack()
         }
     }
 
